@@ -1,0 +1,32 @@
+.node-editor
+    position: relative
+    .minimap
+        position: absolute
+        right: 24px
+        bottom: 24px
+        background: rgba(89, 132, 152, 0.1)
+        padding: 20px
+        overflow: hidden
+        border: 1px solid #b1b7ff
+        border-radius: 8px
+        &.small
+            width: 150px
+            height: 150px
+        &, &.middle
+            width: 220px
+            height: 220px
+        &.large
+            width: 300px
+            height: 300px
+        .area
+            position: relative
+            width: 100%
+            height: 100%
+        .mini-node
+            position: absolute
+            background: rgba(110, 136, 255, 0.8)
+        .mini-viewport
+            position: absolute
+            background: rgba(255, 251, 128, 0.32)
+            border: 1px solid #ffe52b
+

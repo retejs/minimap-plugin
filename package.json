@@ -1,0 +1,21 @@
+{
+  "name": "rete-minimap-plugin",
+  "version": "0.1.0",
+  "description": "",
+  "main": "build/minimap-plugin.min.js",
+  "scripts": {
+    "build": "rete --build rete.config.js",
+    "build:dev": "rete --build rete.config.js --watch",
+    "prepublishOnly": "npm run build"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "vue": "^2.5.17"
+  },
+  "devDependencies": {
+    "rete-cli": "^0.1.1",
+    "rollup-plugin-pug": "^0.1.6",
+    "rollup-plugin-sass": "^0.9.2"
+  }
+}
