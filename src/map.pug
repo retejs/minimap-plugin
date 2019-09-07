@@ -1,9 +1,0 @@
-.minimap(v-if="params.enable", :class="mapClass()")
-    .area(ref="area", @mousedown.stop.prevent)
-        .mini-node(
-            v-for="node in nodes"
-            :style="nodeStyle(node)"
-        )
-        .mini-viewport(ref="viewport"
-            :style="viewportStyle()"
-        )
