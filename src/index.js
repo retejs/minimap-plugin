@@ -13,13 +13,14 @@ const SIZE = {
 function install(editor, params) {
     params.enable = params.enable || true;
     params.size = params.size || SIZE.MIDDLE;
+    params.Vue = params.Vue || Vue;
 
     const el = document.createElement('div');
 
     el.innerHTML = template();
     editor.view.container.appendChild(el);
 
-    var app = new Vue({
+    var app = new params.Vue({
         data: {
             params: params,
             nodes: editor.nodes,
