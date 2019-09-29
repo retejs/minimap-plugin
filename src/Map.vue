@@ -1,5 +1,5 @@
 <template lang="pug">
-.minimap(v-if="params.enable", :class="mapClass()")
+.minimap(:class="mapClass()")
     .area(ref="area", @mousedown.stop.prevent="")
         .mini-node(
             v-for="node in nodes"
@@ -15,15 +15,13 @@ import { drag } from './drag';
 import { nodesBBox } from './utils';
 
 export default {
-    props: ['params', 'nodes', 'views', 'view'],
+    props: ['size', 'nodes', 'views', 'view'],
     data() {
         return {
             transform: { ox: 0, oy: 0, scale: () => 1, invert: () => 1 }
         }
     },
     mounted() {
-        this.$watch('params.size', this.updateTransform);
-        
         drag(this.$refs.viewport, () => {
             return { ...this.view.area.transform }
         }, (dx, dy, initial) => {
@@ -31,12 +29,16 @@ export default {
             let { invert } = this.transform;
     
             this.view.area.translate(x + k * invert(dx), y + k * invert(dy));
-        })
+        });
+        this.updateTransform();
+    },
+    watch: {
+        size() { this.updateTransform() }
     },
     methods: {
         mapClass() {
             return {
-                [this.params.size]: true
+                [this.size]: true
             }
         },
         updateTransform() {

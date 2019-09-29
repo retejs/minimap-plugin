@@ -8,6 +8,7 @@ const SIZE = {
 }
 
 function install(editor, params) {
+    Vue.observable(params);
     params.enable = params.enable !== false;
     params.size = params.size || SIZE.MIDDLE;
 
@@ -16,15 +17,15 @@ function install(editor, params) {
     editor.view.container.appendChild(el);
 
     const app = new Vue({
-        render: h => h(Map, { props: {
-            params,
+        render: h => params.enable ? h(Map, { props: {
+            size: params.size,
             nodes: editor.nodes,
             views: editor.view.nodes,
             view: editor.view
-        }})
+        }}) : null
     }).$mount(el);
 
-    const updateTransform = app.$children[0].updateTransform.bind(app);
+    const updateTransform = () => app.$children[0] && app.$children[0].updateTransform();
 
     editor.on('nodetranslated nodecreated noderemoved translated zoomed', updateTransform);
     window.addEventListener('resize', updateTransform)
