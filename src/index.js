@@ -8,7 +8,7 @@ const SIZE = {
 }
 
 function install(editor, params) {
-    params.enable = params.enable || true;
+    params.enable = params.enable !== false;
     params.size = params.size || SIZE.MIDDLE;
 
     const el = document.createElement('div');
