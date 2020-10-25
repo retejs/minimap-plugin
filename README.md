@@ -21,6 +21,7 @@ Using the params, you can define the minimap size and visibility.
 Available options:
 
 'size' - set minimap size, can be 'small' (150x150), 'middle' (220x220) or 'big' (300x300).
+
 'enable' - minimap on/off.
 
 Later, by changing the values in the object passed to the plugin, you can change the minimap size or visibility.
