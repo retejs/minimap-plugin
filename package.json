@@ -2,7 +2,8 @@
   "name": "rete-minimap-plugin",
   "version": "0.3.1",
   "description": "",
-  "main": "build/minimap-plugin.min.js",
+  "main": "build/minimap-plugin.common.js",
+  "module": "build/minimap-plugin.esm.js",
   "scripts": {
     "build": "rete --build rete.config.js",
     "build:dev": "rete --build rete.config.js --watch",
