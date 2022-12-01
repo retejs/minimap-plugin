@@ -1,11 +1,13 @@
 {
   "name": "rete-minimap-plugin",
-  "version": "0.3.1",
+  "version": "2.0.0-beta.1",
   "description": "",
   "main": "build/minimap-plugin.min.js",
+  "module": "build/minimap-plugin.esm.js",
+  "types": "types",
   "scripts": {
-    "build": "rete --build rete.config.js",
-    "build:dev": "rete --build rete.config.js --watch",
+    "build": "rete build -c rete.config.ts",
+    "build:dev": "rete build -c rete.config.ts --watch",
     "prepublishOnly": "npm run build"
   },
   "author": "Vitaliy Stoliarov",
@@ -14,12 +16,13 @@
     "type": "git",
     "url": "https://github.com/retejs/minimap-plugin.git"
   },
-  "dependencies": {
-    "vue": "^2.5.17"
+  "peerDependencies": {
+    "rete": "file:../rete/rete-2.0.0-beta.1.tgz",
+    "rete-area-plugin": "file:../area-plugin/rete-area-plugin-0.2.1.tgz"
   },
   "devDependencies": {
-    "rete-cli": "^0.6.0",
-    "rollup-plugin-vue": "5.0.1",
-    "vue-template-compiler": "^2.6.10"
+    "rete": "file:../rete/rete-2.0.0-beta.1.tgz",
+    "rete-area-plugin": "file:../area-plugin/rete-area-plugin-0.2.1.tgz",
+    "rete-cli": "^1.0.0-beta.13"
   }
 }
