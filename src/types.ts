@@ -4,3 +4,8 @@ export type Rect = {
     left: number,
     top: number
 }
+export type Transform = {
+    x: number
+    y: number
+    k: number
+}

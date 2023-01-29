@@ -2,7 +2,7 @@ import { BaseSchemes, CanAssignSignal, GetSchemes, NodeEditor, Root, Scope } fro
 import { Area2D, Area2DInherited, AreaPlugin, RenderData } from 'rete-area-plugin'
 
 import { useBoundingCoordinateSystem } from './coordinate-system'
-import { Rect } from './types'
+import { Rect, Transform } from './types'
 
 type NodeSize = { width: number, height: number }
 
@@ -16,8 +16,9 @@ export type MinimapData = {
     element: HTMLElement
     ratio: number
     nodes: Rect[]
-    viewport: any
-    translate(dx: number, dy: number, initial: any): void
+    viewport: Rect
+    start(): Transform
+    translate(dx: number, dy: number, state: Transform): void
 }
 
 export type MinimapExtra<Schemes extends ExpectedScheme> =
@@ -34,12 +35,14 @@ export class MinimapPlugin<Schemes extends ExpectedScheme, K> extends Scope<neve
 
     ratio: number
     minDistance: number
+    boundViewport: boolean
 
-    constructor(private props?: { minDistance?: number, ratio?: number }) {
+    constructor(private props?: { minDistance?: number, ratio?: number, boundViewport?: boolean }) {
         super('minimap')
 
         this.ratio = this.props?.ratio || 1
         this.minDistance = this.props?.minDistance || 2000
+        this.boundViewport = Boolean(this.props?.boundViewport)
     }
 
     setParent(scope: Scope<Substitute<K, Schemes> | Area2D<Schemes>, [Root<Schemes>]>): void {
@@ -95,7 +98,14 @@ export class MinimapPlugin<Schemes extends ExpectedScheme, K> extends Scope<neve
         const { transform } = this.area.area
         const { clientWidth: width, clientHeight: height } = this.area.container
         const { minDistance, ratio } = this
-        const { origin, scale, invert } = useBoundingCoordinateSystem(nodes, minDistance, ratio)
+        const viewport: Rect = {
+            left: -transform.x / transform.k,
+            top: -transform.y / transform.k,
+            width: width / transform.k,
+            height: height / transform.k
+        }
+        const rects = this.boundViewport ? [...nodes, viewport] : nodes
+        const { origin, scale, invert } = useBoundingCoordinateSystem(rects, minDistance, ratio)
 
         parent.emit({
             type: 'render',
@@ -104,20 +114,20 @@ export class MinimapPlugin<Schemes extends ExpectedScheme, K> extends Scope<neve
                 element: this.element,
                 ratio,
                 nodes: nodes.map(node => ({
-                    left: scale(origin.x + node.left),
-                    top: scale(origin.y + node.top),
+                    left: scale(node.left + origin.x),
+                    top: scale(node.top + origin.y),
                     width: scale(node.width),
                     height: scale(node.height)
                 })),
                 viewport: {
-                    left: scale(origin.x - transform.x / transform.k),
-                    top: scale(origin.y - transform.y / transform.k),
-                    width: scale(width / transform.k),
-                    height: scale(height / transform.k),
-                    transform
+                    left: scale(viewport.left + origin.x),
+                    top: scale(viewport.top + origin.y),
+                    width: scale(viewport.width),
+                    height: scale(viewport.height)
                 },
-                translate: (dx, dy, initial) => {
-                    const { x, y, k } = initial
+                start: () => ({ ...transform }),
+                translate: (dx, dy, state) => {
+                    const { x, y, k } = state
 
                     this.area.area.translate(x + invert(dx) * k, y + invert(dy) * k)
                 }
