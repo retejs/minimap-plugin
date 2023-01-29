@@ -19,6 +19,7 @@ export type MinimapData = {
     viewport: Rect
     start(): Transform
     translate(dx: number, dy: number, state: Transform): void
+    point(x: number, y: number): void
 }
 
 export type MinimapExtra<Schemes extends ExpectedScheme> =
@@ -130,6 +131,18 @@ export class MinimapPlugin<Schemes extends ExpectedScheme, K> extends Scope<neve
                     const { x, y, k } = state
 
                     this.area.area.translate(x + invert(dx) * k, y + invert(dy) * k)
+                },
+                point: (x, y) => {
+                    const areaCoordinatesPoint = {
+                        x: (origin.x - invert(x)) * transform.k,
+                        y: (origin.y - invert(y)) * transform.k
+                    }
+                    const center = {
+                        x: areaCoordinatesPoint.x + width / 2,
+                        y: areaCoordinatesPoint.y + height / 2
+                    }
+
+                    this.area.area.translate(center.x, center.y)
                 }
             }
         })
