@@ -2,7 +2,7 @@ import { BaseSchemes, CanAssignSignal, GetSchemes, NodeEditor, Root, Scope } fro
 import { Area2D, Area2DInherited, AreaPlugin, RenderData } from 'rete-area-plugin'
 
 import { useBoundingCoordinateSystem } from './coordinate-system'
-import { Rect, Transform } from './types'
+import { Rect } from './types'
 
 type NodeSize = { width: number, height: number }
 
@@ -17,8 +17,7 @@ export type MinimapData = {
     ratio: number
     nodes: Rect[]
     viewport: Rect
-    start(): Transform
-    translate(dx: number, dy: number, state: Transform): void
+    translate(dx: number, dy: number): void
     point(x: number, y: number): void
 }
 
@@ -126,9 +125,8 @@ export class MinimapPlugin<Schemes extends ExpectedScheme, K> extends Scope<neve
                     width: scale(viewport.width),
                     height: scale(viewport.height)
                 },
-                start: () => ({ ...transform }),
-                translate: (dx, dy, state) => {
-                    const { x, y, k } = state
+                translate: (dx, dy) => {
+                    const { x, y, k } = transform
 
                     this.area.area.translate(x + invert(dx) * k, y + invert(dy) * k)
                 },
