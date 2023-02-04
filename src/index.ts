@@ -24,6 +24,7 @@ export type MinimapData = {
 export type MinimapExtra<Schemes extends ExpectedScheme> =
     | { type: 'unmount', data: { element: HTMLElement } }
     | { type: 'render', data: RenderData<Schemes> | MinimapData }
+    | { type: 'rendered', data: RenderData<Schemes> | MinimapData }
 
 type IsCompatible<K> = Extract<K, { type: 'render' }> extends { type: 'render', data: infer P } ? CanAssignSignal<P, MinimapData> : false // TODO reusable
 type Substitute<K, Schemes extends ExpectedScheme> = IsCompatible<K> extends true ? K : MinimapExtra<Schemes>
