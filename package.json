@@ -2,9 +2,6 @@
   "name": "rete-minimap-plugin",
   "version": "2.0.0-beta.1",
   "description": "",
-  "main": "build/minimap-plugin.min.js",
-  "module": "build/minimap-plugin.esm.js",
-  "types": "types",
   "scripts": {
     "build": "rete build -c rete.config.ts",
     "build:dev": "rete build -c rete.config.ts --watch",
@@ -17,12 +14,12 @@
     "url": "https://github.com/retejs/minimap-plugin.git"
   },
   "peerDependencies": {
-    "rete": "file:../rete/rete-2.0.0-beta.1.tgz",
-    "rete-area-plugin": "file:../area-plugin/rete-area-plugin-0.2.1.tgz"
+    "rete": "file:../rete/dist/package.tgz",
+    "rete-area-plugin": "file:../area-plugin/dist/package.tgz"
   },
   "devDependencies": {
-    "rete": "file:../rete/rete-2.0.0-beta.1.tgz",
-    "rete-area-plugin": "file:../area-plugin/rete-area-plugin-0.2.1.tgz",
-    "rete-cli": "^1.0.0-beta.13"
+    "rete": "file:../rete/dist/package.tgz",
+    "rete-area-plugin": "file:../area-plugin/dist/package.tgz",
+    "rete-cli": "^1.0.0-beta.18"
   }
 }
