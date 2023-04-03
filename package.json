@@ -8,9 +8,19 @@
   },
   "author": "Vitaliy Stoliarov",
   "license": "MIT",
+  "keywords": [
+    "plugin",
+    "minimap",
+    "rete",
+    "Rete.js"
+  ],
+  "homepage": "https://retejs.org",
   "repository": {
     "type": "git",
     "url": "https://github.com/retejs/minimap-plugin.git"
+  },
+  "bugs": {
+    "url": "https://github.com/retejs/minimap-plugin/issues"
   },
   "peerDependencies": {
     "rete": "^2.0.0-beta.1",
