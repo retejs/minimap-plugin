@@ -55,6 +55,7 @@ export class MinimapPlugin<Schemes extends ExpectedScheme, K> extends Scope<neve
     this.element = document.createElement('div')
     this.area.container.appendChild(this.element)
 
+    // eslint-disable-next-line complexity
     this.addPipe(context => {
       if (!('type' in context)) return context
 
@@ -69,6 +70,8 @@ export class MinimapPlugin<Schemes extends ExpectedScheme, K> extends Scope<neve
       } else if (context.type === 'translated') {
         this.render()
       } else if (context.type === 'resized') {
+        this.render()
+      } else if (context.type === 'noderesized') {
         this.render()
       } else if (context.type === 'zoomed') {
         this.render()
