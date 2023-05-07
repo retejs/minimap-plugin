@@ -1,5 +1,5 @@
-import { BaseSchemes, CanAssignSignal, GetSchemes, NodeEditor, Root, Scope } from 'rete'
-import { Area2D, Area2DInherited, AreaPlugin, RenderData } from 'rete-area-plugin'
+import { BaseSchemes, GetSchemes, NodeEditor, Root, Scope } from 'rete'
+import { Area2D, AreaPlugin, RenderSignal } from 'rete-area-plugin'
 
 import { useBoundingCoordinateSystem } from './coordinate-system'
 import { Rect } from './types'
@@ -10,29 +10,24 @@ type ExpectedScheme = GetSchemes<
     BaseSchemes['Node'] & NodeSize,
     BaseSchemes['Connection']
 >
-
-export type MinimapData = {
-    type: 'minimap'
-    element: HTMLElement
+export type Transform = {
+  x: number
+  y: number
+  k: number
+}
+export type MinimapExtra =
+  | RenderSignal<'minimap', {
     ratio: number
     nodes: Rect[]
     viewport: Rect
+    start(): Transform
     translate(dx: number, dy: number): void
     point(x: number, y: number): void
-}
-
-export type MinimapExtra<Schemes extends ExpectedScheme> =
-    | { type: 'unmount', data: { element: HTMLElement } }
-    | { type: 'render', data: RenderData<Schemes> | MinimapData }
-    | { type: 'rendered', data: RenderData<Schemes> | MinimapData }
-
-type IsCompatible<K> = Extract<K, { type: 'render' }> extends { type: 'render', data: infer P } ? CanAssignSignal<P, MinimapData> : false // TODO reusable
-type Substitute<K, Schemes extends ExpectedScheme> = IsCompatible<K> extends true ? K : MinimapExtra<Schemes>
-
-export class MinimapPlugin<Schemes extends ExpectedScheme, K> extends Scope<never, Area2DInherited<Schemes, Substitute<K, Schemes>>> {
+  }>
+export class MinimapPlugin<Schemes extends ExpectedScheme> extends Scope<never, [Area2D<Schemes> | MinimapExtra, Root<Schemes>]> {
   element!: HTMLElement
   editor!: NodeEditor<Schemes>
-  area!: AreaPlugin<Schemes, MinimapExtra<Schemes>>
+  area!: AreaPlugin<Schemes, MinimapExtra>
 
   ratio: number
   minDistance: number
@@ -46,7 +41,7 @@ export class MinimapPlugin<Schemes extends ExpectedScheme, K> extends Scope<neve
     this.boundViewport = Boolean(this.props?.boundViewport)
   }
 
-  setParent(scope: Scope<Substitute<K, Schemes> | Area2D<Schemes>, [Root<Schemes>]>): void {
+  setParent(scope: Scope<MinimapExtra | Area2D<Schemes>, [Root<Schemes>]>): void {
     super.setParent(scope)
 
     this.area = this.parentScope<AreaPlugin<Schemes>>(AreaPlugin)
@@ -97,7 +92,7 @@ export class MinimapPlugin<Schemes extends ExpectedScheme, K> extends Scope<neve
   }
 
   private render() {
-    const parent = this.parentScope() as any as Scope<MinimapExtra<Schemes>>
+    const parent = this.parentScope() as any as Scope<MinimapExtra>
     const nodes = this.getNodesRect()
     const { transform } = this.area.area
     const { clientWidth: width, clientHeight: height } = this.area.container
@@ -117,6 +112,7 @@ export class MinimapPlugin<Schemes extends ExpectedScheme, K> extends Scope<neve
         type: 'minimap',
         element: this.element,
         ratio,
+        start: () => transform,
         nodes: nodes.map(node => ({
           left: scale(node.left + origin.x),
           top: scale(node.top + origin.y),
