@@ -1,6 +1,6 @@
 {
   "name": "rete-minimap-plugin",
-  "version": "2.0.0-beta.6",
+  "version": "2.0.0",
   "description": "",
   "scripts": {
     "build": "rete build -c rete.config.ts",
@@ -23,13 +23,13 @@
     "url": "https://github.com/retejs/minimap-plugin/issues"
   },
   "peerDependencies": {
-    "rete": "^2.0.0-beta.8",
-    "rete-area-plugin": "^2.0.0-beta.10"
+    "rete": "^2.0.1",
+    "rete-area-plugin": "^2.0.0"
   },
   "devDependencies": {
-    "rete": "^2.0.0-beta.8",
-    "rete-area-plugin": "^2.0.0-beta.10",
-    "rete-cli": "^1.0.0-beta.29"
+    "rete": "^2.0.1",
+    "rete-area-plugin": "^2.0.0",
+    "rete-cli": "^1.0.1"
   },
   "dependencies": {
     "@babel/runtime": "^7.21.0"
