@@ -7,14 +7,18 @@ import { Rect } from './types'
 type NodeSize = { width: number, height: number }
 
 type ExpectedScheme = GetSchemes<
-    BaseSchemes['Node'] & NodeSize,
-    BaseSchemes['Connection']
+  BaseSchemes['Node'] & NodeSize,
+  BaseSchemes['Connection']
 >
 export type Transform = {
   x: number
   y: number
   k: number
 }
+/**
+ * Extra signal types for minimap rendering
+ * @priority 10
+ */
 export type MinimapExtra =
   | RenderSignal<'minimap', {
     ratio: number
@@ -24,6 +28,19 @@ export type MinimapExtra =
     translate(dx: number, dy: number): void
     point(x: number, y: number): void
   }>
+
+/**
+ * Minimap plugin, triggers rendering of the minimap
+ * @priority 9
+ * @listens nodetranslated
+ * @listens nodecreated
+ * @listens noderemoved
+ * @listens translated
+ * @listens resized
+ * @listens noderesized
+ * @listens zoomed
+ * @emits render
+ */
 export class MinimapPlugin<Schemes extends ExpectedScheme> extends Scope<never, [Area2D<Schemes> | MinimapExtra, Root<Schemes>]> {
   element!: HTMLElement
   editor!: NodeEditor<Schemes>
@@ -33,6 +50,13 @@ export class MinimapPlugin<Schemes extends ExpectedScheme> extends Scope<never, 
   minDistance: number
   boundViewport: boolean
 
+  /**
+   * @constructor
+   * @param props Plugin properties
+   * @param props.ratio minimap ratio. Default is `1`
+   * @param props.minDistance minimap minimum distance. Default is `2000`
+   * @param props.boundViewport whether to bound the mini-viewport to the minimap. Default is `false`
+   */
   constructor(private props?: { minDistance?: number, ratio?: number, boundViewport?: boolean }) {
     super('minimap')
 
