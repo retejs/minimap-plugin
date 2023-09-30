@@ -104,7 +104,7 @@ export class MinimapPlugin<Schemes extends ExpectedScheme> extends Scope<never, 
     return this.editor.getNodes().map(node => {
       const view = this.area.nodeViews.get(node.id)
 
-      if (!view) throw new Error('view')
+      if (!view) return null
 
       return {
         width: node.width,
@@ -112,7 +112,7 @@ export class MinimapPlugin<Schemes extends ExpectedScheme> extends Scope<never, 
         left: view.position.x,
         top: view.position.y
       }
-    })
+    }).filter(Boolean) as Rect[]
   }
 
   private render() {
