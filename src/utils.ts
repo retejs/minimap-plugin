@@ -11,7 +11,10 @@ export function nodesBoundingBox(nodes: Rect[]) {
     bottom = Math.max(...bottoms)
 
   return {
-    left, right, top, bottom,
+    left,
+    right,
+    top,
+    bottom,
     width: right - left,
     height: bottom - top
   }
