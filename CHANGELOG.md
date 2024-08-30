@@ -1,3 +1,10 @@
+## [2.0.3](https://github.com/retejs/minimap-plugin/compare/v2.0.2...v2.0.3) (2024-08-30)
+
+
+### Bug Fixes
+
+* update cli and fix linting errors ([6aa359f](https://github.com/retejs/minimap-plugin/commit/6aa359febe4f1ccbb7f1bdb2d6d0613e757a192a))
+
 ## [2.0.2](https://github.com/retejs/minimap-plugin/compare/v2.0.1...v2.0.2) (2024-01-27)
 
 
