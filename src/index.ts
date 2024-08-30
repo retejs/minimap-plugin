@@ -60,8 +60,8 @@ export class MinimapPlugin<Schemes extends ExpectedScheme> extends Scope<never, 
   constructor(private props?: { minDistance?: number, ratio?: number, boundViewport?: boolean }) {
     super('minimap')
 
-    this.ratio = this.props?.ratio || 1
-    this.minDistance = this.props?.minDistance || 2000
+    this.ratio = this.props?.ratio ?? 1
+    this.minDistance = this.props?.minDistance ?? 2000
     this.boundViewport = Boolean(this.props?.boundViewport)
   }
 
@@ -101,18 +101,21 @@ export class MinimapPlugin<Schemes extends ExpectedScheme> extends Scope<never, 
   }
 
   private getNodesRect(): Rect[] {
-    return this.editor.getNodes().map(node => {
-      const view = this.area.nodeViews.get(node.id)
+    return this.editor
+      .getNodes()
+      .map(node => {
+        const view = this.area.nodeViews.get(node.id)
 
-      if (!view) return null
+        if (!view) return null
 
-      return {
-        width: node.width,
-        height: node.height,
-        left: view.position.x,
-        top: view.position.y
-      }
-    }).filter(Boolean) as Rect[]
+        return {
+          width: node.width,
+          height: node.height,
+          left: view.position.x,
+          top: view.position.y
+        }
+      })
+      .filter(Boolean) as Rect[]
   }
 
   private render() {
@@ -127,10 +130,12 @@ export class MinimapPlugin<Schemes extends ExpectedScheme> extends Scope<never, 
       width: width / transform.k,
       height: height / transform.k
     }
-    const rects = this.boundViewport ? [...nodes, viewport] : nodes
+    const rects = this.boundViewport
+      ? [...nodes, viewport]
+      : nodes
     const { origin, scale, invert } = useBoundingCoordinateSystem(rects, minDistance, ratio)
 
-    parent.emit({
+    void parent.emit({
       type: 'render',
       data: {
         type: 'minimap',
@@ -152,7 +157,7 @@ export class MinimapPlugin<Schemes extends ExpectedScheme> extends Scope<never, 
         translate: (dx, dy) => {
           const { x, y, k } = transform
 
-          this.area.area.translate(x + invert(dx) * k, y + invert(dy) * k)
+          void this.area.area.translate(x + invert(dx) * k, y + invert(dy) * k)
         },
         point: (x, y) => {
           const areaCoordinatesPoint = {
@@ -164,7 +169,7 @@ export class MinimapPlugin<Schemes extends ExpectedScheme> extends Scope<never, 
             y: areaCoordinatesPoint.y + height / 2
           }
 
-          this.area.area.translate(center.x, center.y)
+          void this.area.area.translate(center.x, center.y)
         }
       }
     })
